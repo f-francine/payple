@@ -22,6 +22,10 @@ config :payple, Payple.Repo,
   migration_primary_key: [type: :binary_id],
   migration_foreign_key: [type: :binary_id]
 
+  config :payple, :basic_auth,
+    username: "nimda",
+    password: "zamiatin"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
