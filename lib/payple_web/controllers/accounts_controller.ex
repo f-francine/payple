@@ -2,6 +2,7 @@ defmodule PaypleWeb.AccountsController do
   use PaypleWeb, :controller
 
   alias Payple.Account
+  alias Payple.Accounts.Transactions.Response, as: TransactionResponse
 
   action_fallback PaypleWeb.FallbackController
 
@@ -22,7 +23,7 @@ defmodule PaypleWeb.AccountsController do
   end
 
   def transaction(conn, params) do
-    with {:ok, %{} = transaction} <- Payple.transaction(params) do
+    with {:ok, %TransactionResponse{} = transaction} <- Payple.transaction(params) do
       conn
       |> put_status(:ok)
       |> render("transaction.json", transaction: transaction)

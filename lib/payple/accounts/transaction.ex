@@ -1,7 +1,7 @@
 defmodule Payple.Accounts.Transaction do
   alias Ecto.Multi
-
   alias Payple.Accounts.Operation
+  alias Payple.Accounts.Transactions.Response, as: TransactionResponse
   alias Payple.Repo
 
   def call(%{"from" => from_id, "to" => to_id, "value" => value}) do
@@ -18,8 +18,10 @@ defmodule Payple.Accounts.Transaction do
 
   defp run_transaction(multi) do
     case Repo.transaction(multi) do
-      {:error,_operation, reason, _changes} -> {:error, reason}
-      {:ok, %{deposit: to_account, withdraw: from_account}} -> {:ok, %{deposit: to_account, withdraw: from_account}}
+      {:error,_operation, reason, _changes} ->
+        {:error, reason}
+      {:ok, %{deposit: to_account, withdraw: from_account}} ->
+        {:ok, TransactionResponse.build(from_account, to_account)}
     end
   end
 end

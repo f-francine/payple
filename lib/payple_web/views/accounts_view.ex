@@ -1,5 +1,6 @@
 defmodule PaypleWeb.AccountsView do
   alias Payple.Account
+  alias Payple.Accounts.Transactions.Response, as: TransactionResponse
 
   def render("update.json", %{account: %Account{id: account_id, balance: balance}}) do
     %{
@@ -11,7 +12,8 @@ defmodule PaypleWeb.AccountsView do
     }
   end
 
-  def render("transaction.json", %{transaction: %{deposit: to_account, withdraw: from_account}}) do
+  def render("transaction.json", %{
+    transaction: %TransactionResponse{to_account: to_account, from_account: from_account}}) do
     %{
       message: "Transaction done succesfully",
       transaction: %{
