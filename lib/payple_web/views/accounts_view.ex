@@ -10,4 +10,20 @@ defmodule PaypleWeb.AccountsView do
       }
     }
   end
+
+  def render("transaction.json", %{transaction: %{deposit: to_account, withdraw: from_account}}) do
+    %{
+      message: "Transaction done succesfully",
+      transaction: %{
+        withdraw: %{
+          id: from_account.id,
+          balance: from_account.balance
+        },
+        deposit: %{
+          id: to_account.id,
+          balance: to_account.balance
+        }
+      }
+    }
+  end
 end
