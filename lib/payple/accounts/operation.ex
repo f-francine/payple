@@ -3,11 +3,15 @@ defmodule Payple.Accounts.Operation do
   alias Payple.Account
 
   def call(%{"id" => id, "value" => value}, operation) do
+    operation_name = account_operation_name(operation)
+
     Multi.new()
-    |> Multi.run(:account, fn repo, _changes ->
+    |> Multi.run(operation_name, fn repo, _changes ->
       get_account(repo, id)
     end)
-    |> Multi.run(:update_balance, fn repo, %{account: account} ->
+    |> Multi.run(operation, fn repo, changes ->
+      account = Map.get(changes, operation_name)
+
       update_balance(repo, account, value, operation)
     end)
   end
@@ -43,5 +47,10 @@ defmodule Payple.Accounts.Operation do
     account
     |> Account.changeset(params)
     |> repo.update()
+  end
+
+  defp account_operation_name(operation) do
+    "account_#{Atom.to_string(operation)}"
+    |> String.to_atom()
   end
 end
