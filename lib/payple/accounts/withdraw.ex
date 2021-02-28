@@ -1,4 +1,4 @@
-defmodule Payple.Accounts.Deposit do
+defmodule Payple.Accounts.Withdraw do
   alias Ecto.Multi
   alias Payple.{Account, Repo}
 
@@ -32,7 +32,7 @@ defmodule Payple.Accounts.Deposit do
     |> handle_cast(balance)
   end
 
-  defp handle_cast({:ok, value}, balance), do: Decimal.add(balance, value)
+  defp handle_cast({:ok, value}, balance), do: Decimal.sub(balance, value)
   defp handle_cast(:error, _balance), do: {:error, "Inavalid deposit value!"}
 
   defp update_account({:error, _reason} = error, _repo, _account), do: error
